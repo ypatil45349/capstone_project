@@ -1,7 +1,10 @@
-from langchain_ollama import OllamaLLM
 from app.services.vector_store import vector_db
+from langchain_community.llms import HuggingFaceHub
 
-llm = OllamaLLM(model="llama3")
+llm = HuggingFaceHub(
+    repo_id="google/flan-t5-base",
+    model_kwargs={"temperature":0.5, "max_length":512}
+)
 
 def ask_question(question):
 
@@ -10,16 +13,16 @@ def ask_question(question):
     context = ""
 
     for doc in docs:
-        context += doc.page_content
+        context += doc.page_content + "\n"
 
     prompt = f"""
-    Answer using this context:
+Answer using this context:
 
-    {context}
+{context}
 
-    Question:
-    {question}
-    """
+Question:
+{question}
+"""
 
     response = llm.invoke(prompt)
 
