@@ -9,7 +9,9 @@ def read_pdf(file_path):
     text = ""
 
     for page in reader.pages:
-        text += page.extract_text()
+        page_text = page.extract_text()
+        if page_text:
+            text += page_text
 
     return text
 
@@ -24,6 +26,7 @@ def chunk_text(text):
     chunks = splitter.split_text(text)
 
     return chunks
+
 
 def process_document(file_path):
 
