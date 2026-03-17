@@ -1,29 +1,21 @@
+import os
 from app.services.vector_store import vector_db
-from langchain_community.llms import HuggingFaceHub
+from langchain_groq import ChatGroq
 
-llm = HuggingFaceHub(
-    repo_id="google/flan-t5-base",
-    model_kwargs={"temperature": 0.5, "max_length": 512}
+llm = ChatGroq(
+    groq_api_key=os.getenv("GROQ_API_KEY"),
+    model="llama-3.1-8b-instant"
 )
 
 def ask_question(question):
-
     docs = vector_db.similarity_search(question, k=3)
+    context = "\n".join([doc.page_content for doc in docs])
 
-    context = ""
+    # Note: Chat models prefer a list of messages
+    prompt = f"Answer using this context.\n\nContext:\n{context}\n\nQuestion:\n{question}"
 
-    for doc in docs:
-        context += doc.page_content + "\n"
-
-    prompt = f"""
-Answer using this context:
-
-{context}
-
-Question:
-{question}
-"""
-
+    # Use invoke like before
     response = llm.invoke(prompt)
 
-    return response
+    # Chat models return a message object, so we extract the content
+    return response.content
