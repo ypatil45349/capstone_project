@@ -4,7 +4,6 @@ from langchain_groq import ChatGroq
 
 llm = None
 
-
 def get_llm():
     global llm
 

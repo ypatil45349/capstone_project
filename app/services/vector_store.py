@@ -22,7 +22,6 @@ def get_vector_db():
 
     return vector_db
 
-
 def store_chunks(chunks):
     db = get_vector_db()
     db.add_texts(texts=chunks)
