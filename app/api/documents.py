@@ -12,6 +12,7 @@ UPLOAD_PATH = "data/uploads/"
 # Ensure upload directory exists
 os.makedirs(UPLOAD_PATH, exist_ok=True)
 
+
 @router.post("/documents")
 async def upload_document(file: UploadFile):
 
